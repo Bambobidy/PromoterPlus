@@ -6,7 +6,7 @@ export default StyleSheet.create({
     height: 45,
     borderRadius: 5,
     marginHorizontal: Metrics.section,
-    marginVertical: Metrics.baseMargin,
+    marginVertical: Metrics.section,
     backgroundColor: Colors.fire,
     justifyContent: 'center'
   },

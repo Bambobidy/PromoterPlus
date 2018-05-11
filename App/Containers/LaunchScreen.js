@@ -6,7 +6,11 @@ import { Images } from '../Themes'
 import styles from './Styles/LaunchScreenStyles'
 
 export default class LaunchScreen extends Component {
+  static navigationOptions = {
+    title: "LaunchScreen"
+  };
   render () {
+    const { navigate } = this.props.navigation;
     return (
       <View style={styles.mainContainer}>
         <Image source={Images.background} style={styles.backgroundImage} resizeMode='stretch' />

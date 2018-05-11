@@ -9,7 +9,7 @@ const ApplicationStyles = {
   screen: {
     mainContainer: {
       flex: 1,
-      backgroundColor: Colors.transparent
+      backgroundColor: Colors.background
     },
     backgroundImage: {
       position: 'absolute',
@@ -42,8 +42,22 @@ const ApplicationStyles = {
     },
     titleText: {
       ...Fonts.style.h2,
-      fontSize: 14,
-      color: Colors.text
+      fontSize: 30,
+      color: Colors.brandPrimary,
+      marginVertical: Metrics.doubleBaseMargin,
+      textAlign: 'center'
+    },
+    labelText: {
+      ...Fonts.style.h2,
+      fontSize: 15,
+      color: Colors.snow,
+      marginBottom: Metrics.baseMargin,
+      marginHorizontal: Metrics.section,
+    },
+    input: {
+      backgroundColor: Colors.snow,
+      borderRadius: 5,
+      marginHorizontal: Metrics.section
     }
   },
   darkLabelContainer: {
