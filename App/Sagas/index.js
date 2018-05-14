@@ -7,13 +7,15 @@ import DebugConfig from "../Config/DebugConfig";
 
 import { StartupTypes } from "../Redux/StartupRedux";
 import { GithubTypes } from "../Redux/GithubRedux";
-import { LoginTypes } from "../Redux/LoginRedux";
+import { FormTypes } from "../Redux/FormRedux";
+import { UnsentTypes }from "../Redux/UnsentRedux";
 
 /* ------------- Sagas ------------- */
 
 import { startup } from "./StartupSagas";
 import { getUserAvatar } from "./GithubSagas";
-import { requestLogin } from "../Sagas/LoginSagas";
+import { sendForm, requestLogin } from "./FormSagas";
+import { sendUnsent } from "./UnsentSagas";
 
 /* ------------- API ------------- */
 
@@ -28,7 +30,11 @@ export default function* root() {
     // some sagas only receive an action
     takeLatest(StartupTypes.STARTUP, startup),
 
-    takeLatest(LoginTypes.LOGIN_REQUEST, requestLogin, api.loginRequest),
+    takeLatest(FormTypes.LOGIN_REQUEST, requestLogin, api.loginRequest),
+
+    takeLatest(FormTypes.SET_FEEDBACK, sendForm, api.sendForm),
+
+    takeLatest(UnsentTypes.SEND_UNSENT, sendUnsent, api.sendForm),
 
     // some sagas receive extra parameters in addition to an action
     takeLatest(GithubTypes.USER_REQUEST, getUserAvatar, api)

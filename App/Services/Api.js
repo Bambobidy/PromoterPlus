@@ -3,7 +3,8 @@ import apisauce from "apisauce";
 
 // our "constructor"
 const create = (
-  baseURL = "https://epoypcb3x8.execute-api.eu-west-1.amazonaws.com/dev"
+  loginURL = "https://epoypcb3x8.execute-api.eu-west-1.amazonaws.com/dev",
+  sendURL = "https://cvc-ws2-qa.rims.ac.za/PromoPlus/api/v1/Survey"
 ) => {
   // ------
   // STEP 1
@@ -13,11 +14,23 @@ const create = (
   //
   const api = apisauce.create({
     // base URL is read from the "constructor"
-    baseURL,
+    baseURL: loginURL,
     // here are some default headers
     headers: {
       "Cache-Control": "no-cache",
       "Content-Type": "application/json"
+    },
+    // 10 second timeout...
+    timeout: 10000
+  });
+
+  const sendApi = apisauce.create({
+    // base URL is read from the "constructor"
+    baseURL: sendURL,
+    // here are some default headers
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Basic YWRtaW5AdGVzdC5jb206UGFzc3dvcmQxMjM="
     },
     // 10 second timeout...
     timeout: 10000
@@ -53,6 +66,12 @@ const create = (
     });
   };
 
+  const sendForm = object => {
+    return sendApi.post("Participant", object, {
+      headers: { "Content-Type": "application/json" }
+    });
+  };
+
   // ------
   // STEP 3
   // ------
@@ -70,7 +89,8 @@ const create = (
     getRoot,
     getRate,
     getUser,
-    loginRequest
+    loginRequest,
+    sendForm
   };
 };
 

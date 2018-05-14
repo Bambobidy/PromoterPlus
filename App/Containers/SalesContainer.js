@@ -20,7 +20,7 @@ import { RadioGroup, RadioButton } from "react-native-flexi-radio-button";
 import { productDairyMaid, question } from "../Transforms/Questions";
 import FormActions from "../Redux/FormRedux";
 
-class TasterContainer extends Component {
+class SalesContainer extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.header) {
       this.setState({
@@ -37,11 +37,11 @@ class TasterContainer extends Component {
   }
 
   componentDidMount() {
-    this.props.setParticipantTypeId();
+    this.props.setParticipantTypeId(this.props.navigation.state.params.setParticipantTypeId);
   }
 
   static navigationOptions = {
-    title: "Taster"
+    title: "Sales"
   };
 
   state = {
@@ -63,7 +63,7 @@ class TasterContainer extends Component {
 
 const mapDispatchToProps = dispatch => {
   return {
-    setParticipantTypeId: () => dispatch(FormActions.setParticipantTypeId("3"))
+    setParticipantTypeId: participantTypeId => dispatch(FormActions.setParticipantTypeId(participantTypeId))
   };
 };
 
@@ -74,4 +74,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TasterContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(SalesContainer);

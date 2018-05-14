@@ -8,18 +8,20 @@ import PhotoPromoter from "../Containers/PhotoPromoterContainer";
 import Stock from "../Containers/StockContainer";
 import StockCount from "../Containers/StockCountContainer";
 import Promotion from "../Containers/PromotionContainer";
+import Sales from "../Containers/SalesContainer";
 
 // Manifest of possible screens
 const PrimaryNav = StackNavigator(
   {
     LaunchScreen: { screen: LaunchScreen },
-    Login: {screen: Login},
-    PhotoSign: {screen: PhotoSign},
-    PhotoStand: {screen: PhotoStand},
-    PhotoPromoter: {screen: PhotoPromoter},
-    Stock: {screen: Stock},
-    StockCount: {screen: StockCount},
-    Promotion: {screen: Promotion}
+    Login: { screen: Login },
+    PhotoSign: { screen: PhotoSign },
+    PhotoStand: { screen: PhotoStand },
+    PhotoPromoter: { screen: PhotoPromoter },
+    Stock: { screen: Stock },
+    StockCount: { screen: StockCount },
+    Promotion: { screen: Promotion },
+    Sales: { screen: Sales }
   },
   {
     // Default config for all screens

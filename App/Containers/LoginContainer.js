@@ -15,7 +15,7 @@ import {
 import Toast, { DURATION } from "react-native-easy-toast";
 import RoundedButton from "../Components/RoundedButton";
 import { connect } from "react-redux";
-import LoginActions from "../Redux/LoginRedux";
+import FormActions from "../Redux/FormRedux";
 
 import styles from "./Styles/LaunchScreenStyles";
 
@@ -25,16 +25,20 @@ class LoginContainer extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.store !== "") {
+    if (nextProps.productList !== "") {
+        try {
+          AsyncStorage.removeItem("Unsent");
+        } catch (exception) {
+          console.warn("WHY");
+        }
       const { navigate } = this.props.navigation;
-      navigate("PhotoSign");
+      navigate("Promotion");
     }
   }
 
   userName = "";
 
   render() {
-    const { navigate } = this.props.navigation;
     return (
       <View style={styles.mainContainer}>
         <ScrollView style={styles.container}>
@@ -60,16 +64,14 @@ class LoginContainer extends Component {
 
 const mapStateToProps = state => {
   return {
-    store: state.login.store,
-    company: state.login.company,
-    productList: state.login.productList,
-    fetching: state.login.fetching
+    productList: state.form.productList,
+    fetching: state.form.fetching
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    loginRequest: userName => dispatch(LoginActions.loginRequest(userName))
+    loginRequest: userName => dispatch(FormActions.loginRequest(userName))
   };
 };
 

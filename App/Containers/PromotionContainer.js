@@ -12,14 +12,64 @@ import {
   AsyncStorage,
   ToastAndroid
 } from "react-native";
-
+import CompanyName from "../Transforms/CompanyNames";
 import styles from "./Styles/LaunchScreenStyles";
 import RoundedButton from "../Components/RoundedButton";
+import { connect } from "react-redux";
+import UnsentActions from "../Redux/UnsentRedux";
 
-export default class PromotionContainer extends Component {
+class PromotionContainer extends Component {
   static navigationOptions = {
     title: "Promotion"
   };
+
+  state = {
+    unsent: this.props.unsent
+  };
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.header) {
+      this.setState({
+        header:
+          nextProps.header === "product"
+            ? "Product"
+            : question[nextProps.header][0],
+        list:
+          nextProps.header === "product"
+            ? this.props.productList
+            : question[nextProps.header].slice(1)
+      });
+    }
+    if (nextProps.refresh){
+      console.warn ("IN : ");
+      this.refresh();
+    }
+  }
+
+  refresh(){
+    try {
+      AsyncStorage.getItem("Unsent", (err, result) => {
+        if (result !== null) {
+          const arrResult = JSON.parse(result);
+          console.warn ("IN : ");
+          this.setState({
+            unsent: arrResult
+          });
+          this.props.setUnsent(arrResult);
+        }
+      });
+    } catch (err) {}
+    this.props.refreshUnsent(false);
+  }
+
+  componentDidMount(){
+    this.refresh();
+  }
+
+  sendUnsent = () => {
+    console.warn("a");
+  };
+
   render() {
     const { navigate } = this.props.navigation;
     return (
@@ -30,30 +80,26 @@ export default class PromotionContainer extends Component {
             {this.props.store}
           </Text>
 
-          <Text style={styles.titleText}>
-            You are entering for DairyMaid at test
-          </Text>
+          <RoundedButton onPress={() => navigate("Sales",{setParticipantTypeId: "2"})} text="Sales" />
 
-          <RoundedButton onPress={() => this.sales()} text="Sales" />
+          <RoundedButton onPress={() => navigate("Sales",{setParticipantTypeId: "3"})} text="Taster" />
 
-          <RoundedButton onPress={() => this.taster()} text="Taster" />
-
-          <RoundedButton onPress={() => this.foot()} text="Foot Traffic" />
+          <RoundedButton onPress={() => navigate("Foot")} text="Foot Traffic" />
 
           <RoundedButton
             onPress={() => this.sendUnsent()}
-            text="{this.state.unSent}"
+            text={"send unsent " + this.state.unsent.length}
           />
 
           <RoundedButton
-            text="add a product"
+            text="take a pick"
             onPress={() => {
               this.setState({ stage: 0 });
             }}
           />
 
           <RoundedButton
-            text="take a pick"
+            text="add a product"
             onPress={() => {
               this.setState({ stage: 0 });
             }}
@@ -73,14 +119,18 @@ export default class PromotionContainer extends Component {
 
 const mapStateToProps = state => {
   return {
-    store: state.login.store,
-    company: state.login.company,
-    productList: state.login.productList
+    store: state.form.sendObject.Location,
+    company: state.form.sendObject.ClientId,
+    unsent: state.unsent.unsent,
+    refresh: state.unsent.refresh
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    loginRequest: userName => dispatch(LoginActions.loginRequest(userName))
+    setUnsent: unsent => dispatch(UnsentActions.setUnsent(unsent)),
+    refreshUnsent: refresh => dispatch(UnsentActions.refreshUnsent(refresh))
   };
 };
+
+export default connect(mapStateToProps, mapDispatchToProps)(PromotionContainer);
