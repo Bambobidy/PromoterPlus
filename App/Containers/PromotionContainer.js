@@ -97,7 +97,7 @@ class PromotionContainer extends Component {
           />
 
           <RoundedButton
-            text="take a pick"
+            text="take a pic"
             onPress={() => {
               navigate('PhotoSign');
             }}

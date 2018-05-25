@@ -78,11 +78,14 @@ const create = (
       }
     );
 
-  const sendPhoto = ({ object, token }) =>
-    api.post('Medias', object, {
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded',
-      Authorization: `bearer ${token}` }
+  const sendPhoto = ({ token, form }) => {
+    api.post('Medias', form, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: `bearer ${token}`
+      }
     });
+  };
 
   return {
     loginRequest,
