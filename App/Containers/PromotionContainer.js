@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Alert,
   ScrollView,
@@ -11,104 +11,109 @@ import {
   AppState,
   AsyncStorage,
   ToastAndroid
-} from "react-native";
-import CompanyName from "../Transforms/CompanyNames";
-import styles from "./Styles/LaunchScreenStyles";
-import RoundedButton from "../Components/RoundedButton";
-import { connect } from "react-redux";
-import UnsentActions from "../Redux/UnsentRedux";
+} from 'react-native';
+import CompanyName from '../Transforms/CompanyNames';
+import styles from './Styles/LaunchScreenStyles';
+import RoundedButton from '../Components/RoundedButton';
+import { connect } from 'react-redux';
+import UnsentActions from '../Redux/UnsentRedux';
 
 class PromotionContainer extends Component {
   static navigationOptions = {
-    title: "Promotion"
+    title: 'Promotion'
   };
 
   state = {
-    unsent: this.props.unsent
+    unsent: 0
   };
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.header) {
       this.setState({
         header:
-          nextProps.header === "product"
-            ? "Product"
+          nextProps.header === 'product'
+            ? 'Product'
             : question[nextProps.header][0],
         list:
-          nextProps.header === "product"
+          nextProps.header === 'product'
             ? this.props.productList
             : question[nextProps.header].slice(1)
       });
     }
-    if (nextProps.refresh){
-      console.warn ("IN : ");
+    if (nextProps.refresh) {
       this.refresh();
     }
   }
 
-  refresh(){
-    try {
-      AsyncStorage.getItem("Unsent", (err, result) => {
-        if (result !== null) {
-          const arrResult = JSON.parse(result);
-          console.warn ("IN : ");
-          this.setState({
-            unsent: arrResult
-          });
-          this.props.setUnsent(arrResult);
-        }
-      });
-    } catch (err) {}
-    this.props.refreshUnsent(false);
-  }
-
-  componentDidMount(){
-    this.refresh();
+  refresh() {
+    // try {
+    //   AsyncStorage.getItem('Unsent', (err, result) => {
+    //     if (result !== null) {
+    //       const arrResult = JSON.parse(result);
+    //       this.props.setUnsent(arrResult);
+    //       this.setState({
+    //         // unsent: `Click to send ${arrResult.length}`
+    //         unsent: `Click to send${this.state.unsent}`
+    //       });
+    //     }
+    //   });
+    // } catch (err) {}
+    // this.props.refreshUnsent(false);
+    this.setState({ unsent: 0 });
   }
 
   sendUnsent = () => {
-    console.warn("a");
+    this.setState({ unsent: 0 });
   };
 
   render() {
     const { navigate } = this.props.navigation;
+    console.disableYellowBox = true;
     return (
       <View style={styles.mainContainer}>
         <ScrollView style={styles.container}>
           <Text style={styles.titleText}>
-            You are entering for {CompanyName(this.props.company)} at{" "}
-            {this.props.store}
+            Promotions for {'\n'} {this.props.company}
           </Text>
 
-          <RoundedButton onPress={() => navigate("Sales",{setParticipantTypeId: "2"})} text="Sales" />
+          <RoundedButton
+            onPress={() => navigate('Sales', { setParticipantTypeId: '1' })}
+            text="Sales"
+          />
 
-          <RoundedButton onPress={() => navigate("Sales",{setParticipantTypeId: "3"})} text="Taster" />
+          <RoundedButton
+            onPress={() => navigate('Sales', { setParticipantTypeId: '2' })}
+            text="Taster"
+          />
 
-          <RoundedButton onPress={() => navigate("Foot")} text="Foot Traffic" />
+          <RoundedButton
+            onPress={() => navigate('Foot')}
+            text="Foot Traffic"
+          />
 
           <RoundedButton
             onPress={() => this.sendUnsent()}
-            text={"send unsent " + this.state.unsent.length}
+            text={`click to send ${this.state.unsent}`}
           />
 
           <RoundedButton
             text="take a pick"
             onPress={() => {
-              this.setState({ stage: 0 });
+              navigate('PhotoSign');
             }}
           />
 
           <RoundedButton
             text="add a product"
             onPress={() => {
-              this.setState({ stage: 0 });
+              navigate('StockList');
             }}
           />
 
           <RoundedButton
             text="log out"
             onPress={() => {
-              this.setState({ stage: 0 });
+              navigate('Login');
             }}
           />
         </ScrollView>
@@ -117,20 +122,15 @@ class PromotionContainer extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    store: state.form.sendObject.Location,
-    company: state.form.sendObject.ClientId,
-    unsent: state.unsent.unsent,
-    refresh: state.unsent.refresh
-  };
-};
+const mapStateToProps = state => ({
+  unsent: state.unsent.unsent,
+  refresh: state.unsent.refresh,
+  company: state.form.client
+});
 
-const mapDispatchToProps = dispatch => {
-  return {
-    setUnsent: unsent => dispatch(UnsentActions.setUnsent(unsent)),
-    refreshUnsent: refresh => dispatch(UnsentActions.refreshUnsent(refresh))
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  setUnsent: unsent => dispatch(UnsentActions.setUnsent(unsent)),
+  refreshUnsent: refresh => dispatch(UnsentActions.refreshUnsent(refresh))
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(PromotionContainer);

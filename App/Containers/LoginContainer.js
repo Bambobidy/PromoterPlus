@@ -1,44 +1,82 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
-  Alert,
   ScrollView,
   Text,
-  Image,
   View,
   TextInput,
-  StyleSheet,
   BackHandler,
-  AppState,
-  AsyncStorage,
-  ToastAndroid
-} from "react-native";
-import Toast, { DURATION } from "react-native-easy-toast";
-import RoundedButton from "../Components/RoundedButton";
-import { connect } from "react-redux";
-import FormActions from "../Redux/FormRedux";
-
-import styles from "./Styles/LaunchScreenStyles";
+  DeviceEventEmitter
+} from 'react-native';
+import { connect } from 'react-redux';
+// import FusedLocation from 'react-native-fused-location';
+// import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
+import RoundedButton from '../Components/RoundedButton';
+import FormActions from '../Redux/FormRedux';
+import LoggedInActions from '../Redux/LoggedInRedux';
+import styles from './Styles/LaunchScreenStyles';
 
 class LoginContainer extends Component {
   static navigationOptions = {
-    title: "Login"
+    title: 'Login'
   };
 
+  state = {
+    longitude: '22',
+    latitude: '23'
+  };
+
+  componentDidMount() {
+    // LocationServicesDialogBox.checkLocationServicesIsEnabled({
+    //   message:
+    //     "<h2>Use Location ?</h2>This app wants to change your device settings:<br/><br/>Use GPS, Wi-Fi, and cell network for location<br/><br/><a href='#'>Learn more</a>",
+    //   ok: 'YES',
+    //   cancel: 'NO',
+    //   enableHighAccuracy: true, // true => GPS AND NETWORK PROVIDER, false => GPS OR NETWORK PROVIDER
+    //   showDialog: true, // false => Opens the Location access page directly
+    //   openLocationServices: true, // false => Directly catch method is called if location services are turned off
+    //   preventOutSideTouch: false, //true => To prevent the location services popup from closing when it is clicked outside
+    //   preventBackClick: false, //true => To prevent the location services popup from closing when it is clicked back button
+    //   providerListener: true // true ==> Trigger "locationProviderStatusChange" listener when the location state changes
+    // })
+    //   .then(() => {
+    //     navigator.geolocation.getCurrentPosition(
+    //       position => {
+    //         console.log(position.coords.longitude, position.coords.latitude);
+    //         this.setState({
+    //           longitude: position.coords.longitude,
+    //           latitude: position.coords.latitude
+    //         });
+    //       },
+    //       error => console.log(error),
+    //       { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 }
+    //     );
+    //   })
+    //   .catch(error => {
+    //     console.log(error.message);
+    //   });
+
+    // BackHandler.addEventListener('hardwareBackPress', () => {
+    //   LocationServicesDialogBox.forceCloseDialog();
+    // });
+
+    // DeviceEventEmitter.addListener('locationProviderStatusChange', status => {
+    //   console.log(status);
+    // });
+  }
+
   componentWillReceiveProps(nextProps) {
-    if (nextProps.productList !== "") {
-        try {
-          AsyncStorage.removeItem("Unsent");
-        } catch (exception) {
-          console.warn("WHY");
-        }
-      const { navigate } = this.props.navigation;
-      navigate("Promotion");
+    const { navigate } = this.props.navigation;
+    if (nextProps.productList !== '' && !nextProps.date) {
+      this.props.setLoggedInDate(new Date());
+      navigate('PhotoSign');
     }
   }
 
-  userName = "";
+  username = '';
 
   render() {
+    console.disableYellowBox = true;
+    const { navigate } = this.props.navigation;
     return (
       <View style={styles.mainContainer}>
         <ScrollView style={styles.container}>
@@ -48,13 +86,19 @@ class LoginContainer extends Component {
           <TextInput
             style={styles.input}
             onChangeText={text => {
-              this.userName = text;
+              this.username = text;
             }}
           />
 
           <RoundedButton
             text="Let me in"
-            onPress={() => this.props.loginRequest(this.userName)}
+            onPress={() => {
+              this.props.loginRequest(
+                this.username,
+                this.state.latitude,
+                this.state.longitude
+              );
+            }}
           />
         </ScrollView>
       </View>
@@ -62,17 +106,24 @@ class LoginContainer extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    productList: state.form.productList,
-    fetching: state.form.fetching
-  };
-};
+const mapStateToProps = state => ({
+  date: state.loggedIn.date,
+  productList: state.form.productList
+});
 
-const mapDispatchToProps = dispatch => {
-  return {
-    loginRequest: userName => dispatch(FormActions.loginRequest(userName))
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  loginRequest: (username, latitude, longitude) =>
+    dispatch(
+      FormActions.loginRequest(
+        'app@promoterplus.com',
+        'Password123',
+        username,
+        latitude,
+        longitude
+      )
+    ),
+
+  setLoggedInDate: date => dispatch(LoggedInActions.setLoggedInDate(date))
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginContainer);

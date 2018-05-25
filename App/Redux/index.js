@@ -1,14 +1,16 @@
-import { combineReducers } from "redux";
-import configureStore from "./CreateStore";
-import rootSaga from "../Sagas/";
+import { combineReducers } from 'redux';
+import configureStore from './CreateStore';
+import rootSaga from '../Sagas/';
 
 /* ------------- Assemble The Reducers ------------- */
 export const reducers = combineReducers({
-  nav: require("./NavigationRedux").reducer,
-  github: require("./GithubRedux").reducer,
-  search: require("./SearchRedux").reducer,
-  form: require("./FormRedux").reducer,
-  unsent: require("./UnsentRedux").reducer
+  nav: require('./NavigationRedux').reducer,
+  github: require('./GithubRedux').reducer,
+  search: require('./SearchRedux').reducer,
+  form: require('./FormRedux').reducer,
+  unsent: require('./UnsentRedux').reducer,
+  loggedIn: require('./LoggedInRedux').reducer,
+  product: require('./ProductRedux').reducer
 });
 
 export default () => {
@@ -19,10 +21,10 @@ export default () => {
 
   if (module.hot) {
     module.hot.accept(() => {
-      const nextRootReducer = require("./").reducers;
+      const nextRootReducer = require('./').reducers;
       store.replaceReducer(nextRootReducer);
 
-      const newYieldedSagas = require("../Sagas").default;
+      const newYieldedSagas = require('../Sagas').default;
       sagasManager.cancel();
       sagasManager.done.then(() => {
         sagasManager = sagaMiddleware.run(newYieldedSagas);

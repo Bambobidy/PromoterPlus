@@ -1,80 +1,61 @@
 import React, { Component } from "react";
 
-import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
-import Camera from "react-native-camera";
+import {
+  StyleSheet,
+  Text,
+  TouchableHighlight,
+  View,
+  TouchableOpacity
+} from "react-native";
+import { RNCamera } from "react-native-camera";
+import { connect } from "react-redux";
+import LoggedInActions from "../Redux/LoggedInRedux";
+import styles from '../Components/Styles/RNCamera'
 
-export default class PhotoPromoterContainer extends Component {
+class PhotoStandContainer extends Component {
   static navigationOptions = {
     title: "PhotoPromoter"
   };
-  
+
   state = {
     taken: false
   };
 
-  takePicture() {
-    this.setState({ taken: true });
-    const options = {};
-    this.camera
-      .capture({ metadata: options })
-      .then(data => console.log(data))
-      .catch(err => console.error(err));
-  }
-
-  displayMessage = (navigate) => {
-    if (this.state.taken) {
-      return (
-        <View>
-          <Text style={styles.capture} onPress={navigate("Stock")}>[HAPPY]</Text>
-          <Text style={styles.capture}>[NOT HAPPY]</Text>
-        </View>
-      );
-    } else {
-      return (
-        <Text style={styles.capture} onPress={this.takePicture.bind(this)}>
-          [CAPTURE PROMOTER]
-        </Text>
-      );
+  takePicture = async function() {
+    if (this.camera) {
+      const options = { quality: 0.5, base64: true };
+      const data = await this.camera.takePictureAsync(options);
+      console.log(data);
+      const { navigate } = this.props.navigation;
+      navigate("StockList");
     }
   };
 
   render() {
-    const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
-        <Camera
-          ref={cam => {
-            this.camera = cam;
+        <RNCamera
+          ref={ref => {
+            this.camera = ref;
           }}
           style={styles.preview}
-          aspect={Camera.constants.Aspect.fill}
-        >
-          {/* <Text style={styles.capture} onPress={this.takePicture.bind(this)}>
-            [CAPTURE SIGN IN SHEET]
-          </Text> */}
-          {this.displayMessage(navigate)}
-        </Camera>
+          type={RNCamera.Constants.Type.back}
+          flashMode={RNCamera.Constants.FlashMode.on}
+          permissionDialogTitle={"Permission to use camera"}
+          permissionDialogMessage={
+            "We need your permission to use your camera phone"
+          }
+        />
+        <Text style={styles.capture} onPress={this.takePicture.bind(this)}>
+          [CAPTURE PROMOTER]
+        </Text>
       </View>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: "row"
-  },
-  preview: {
-    flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "center"
-  },
-  capture: {
-    flex: 0,
-    backgroundColor: "#fff",
-    borderRadius: 5,
-    color: "#000",
-    padding: 10,
-    margin: 40
-  }
+const mapDispatchToProps = dispatch => ({
+  setPhotoSign: data => dispatch(LoggedInActions.setPhotoSign(data))
 });
+
+export default connect(null, mapDispatchToProps)(PhotoStandContainer);

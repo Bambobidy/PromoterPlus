@@ -17,41 +17,22 @@ import RoundedButton from '../Components/RoundedButton';
 import Forms from '../Components/Forms';
 import { connect } from 'react-redux';
 import { RadioGroup, RadioButton } from 'react-native-flexi-radio-button';
-import { productDairyMaid, question } from '../Transforms/Questions';
+import { productDairyMaid, question, companies } from '../Transforms/Questions';
 import FormActions from '../Redux/FormRedux';
 
-class SalesContainer extends Component {
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.header) {
-      this.setState({
-        header:
-          nextProps.header === 'product'
-            ? 'Product'
-            : question[nextProps.header][0],
-        list:
-          nextProps.header === 'product'
-            ? this.props.productList
-            : question[nextProps.header].slice(1)
-      });
-    }
-  }
-
-  componentDidMount() {
-    this.props.setParticipantTypeId(this.props.navigation.state.params.setParticipantTypeId);
-  }
+class CantConnectContainer extends Component {
 
   static navigationOptions = {
-    title: 'Sales'
+    title: 'CantConnect'
   };
 
   state = {
-    header: 'Product',
-    list: this.props.productList.map(el => el.label)
+    header: 'Store',
+    list: companies
   };
 
   render() {
     const { navigate } = this.props.navigation;
-    console.disableYellowBox = true;
     return (
       <View style={styles.mainContainer}>
         <ScrollView style={styles.container}>
@@ -71,4 +52,4 @@ const mapStateToProps = state => ({
     header: state.form.header
   });
 
-export default connect(mapStateToProps, mapDispatchToProps)(SalesContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(CantConnectContainer);

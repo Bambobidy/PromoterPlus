@@ -1,80 +1,68 @@
 import React, { Component } from "react";
 
-import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
-import Camera from "react-native-camera";
+import {
+  StyleSheet,
+  Text,
+  TouchableHighlight,
+  View,
+  TouchableOpacity
+} from "react-native";
+import { RNCamera } from "react-native-camera";
+import { connect } from "react-redux";
+import LoggedInActions from "../Redux/LoggedInRedux";
+import PhotoActions from "../Redux/PhotoRedux";
+import styles from "../Components/Styles/RNCamera";
 
-export default class PhotoSignContainer extends Component {
+class PhotoSignContainer extends Component {
   static navigationOptions = {
     title: "PhotoSign"
   };
-  
+
   state = {
     taken: false
   };
 
-  takePicture() {
-    this.setState({ taken: true });
-    const options = {};
-    this.camera
-      .capture({ metadata: options })
-      .then(data => console.log(data))
-      .catch(err => console.error(err));
-  }
+  takePicture = async function() {
+    if (this.camera) {
+      const options = { quality: 0.5, base64: true };
+      const data = await this.camera.takePictureAsync(options);
+      let form = new FormData();
+      form.append("file", data.uri);
+      form.append("mediaTypeId", "1");
+      console.log("form", form);
+      this.props.sendPhoto(form);
+      const { navigate } = this.props.navigation;
 
-  displayMessage = (navigate) => {
-    if (this.state.taken) {
-      return (
-        <View>
-          <Text style={styles.capture} onPress={navigate("PhotoStand")}>[HAPPY]</Text>
-          <Text style={styles.capture}>[NOT HAPPY]</Text>
-        </View>
-      );
-    } else {
-      return (
-        <Text style={styles.capture} onPress={this.takePicture.bind(this)}>
-          [CAPTURE SIGN IN SHEET]
-        </Text>
-      );
+      navigate("PhotoStand");
     }
   };
 
   render() {
-    const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
-        <Camera
-          ref={cam => {
-            this.camera = cam;
+        <RNCamera
+          ref={ref => {
+            this.camera = ref;
           }}
           style={styles.preview}
-          aspect={Camera.constants.Aspect.fill}
-        >
-          {/* <Text style={styles.capture} onPress={this.takePicture.bind(this)}>
-            [CAPTURE SIGN IN SHEET]
-          </Text> */}
-          {this.displayMessage(navigate)}
-        </Camera>
+          type={RNCamera.Constants.Type.back}
+          flashMode={RNCamera.Constants.FlashMode.on}
+          permissionDialogTitle={"Permission to use camera"}
+          permissionDialogMessage={
+            "We need your permission to use your camera phone"
+          }
+        />
+        <Text style={styles.capture} onPress={this.takePicture.bind(this)}>
+          [CAPTURE SING IN SHEET]
+        </Text>
       </View>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: "row"
-  },
-  preview: {
-    flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "center"
-  },
-  capture: {
-    flex: 0,
-    backgroundColor: "#fff",
-    borderRadius: 5,
-    color: "#000",
-    padding: 10,
-    margin: 40
-  }
+const mapDispatchToProps = dispatch => ({
+  setPhotoSign: data => dispatch(LoggedInActions.setPhotoSign(data)),
+  sendPhoto: data => dispatch(PhotoActions.sendPhoto(data))
 });
+
+export default connect(null, mapDispatchToProps)(PhotoSignContainer);

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Alert,
   ScrollView,
@@ -11,27 +11,43 @@ import {
   AppState,
   AsyncStorage,
   ToastAndroid
-} from "react-native";
-import styles from "./Styles/LaunchScreenStyles";
-import RoundedButton from "../Components/RoundedButton";
-import CompanyName from "../Transforms/CompanyNames";
-import { connect } from "react-redux";
+} from 'react-native';
+import styles from './Styles/LaunchScreenStyles';
+import RoundedButton from '../Components/RoundedButton';
+import CompanyName from '../Transforms/CompanyNames';
+import { connect } from 'react-redux';
+import ProductActions from '../Redux/ProductRedux';
 
 class StockCountContainer extends Component {
   static navigationOptions = {
-    title: "StockCount"
+    title: 'StockCount'
   };
-  render() {
+
+  next = () => {
     const { navigate } = this.props.navigation;
+    // this.props.setNumber(this.count);
+    navigate('StockList');
+  };
+
+  finish = () => {
+    const { navigate } = this.props.navigation;
+    // this.props.setNumber(this.count);
+    navigate('Promotion');
+  }
+
+  count = '';
+
+  render() {
     return (
       <View style={styles.mainContainer}>
         <ScrollView style={styles.container}>
           <Text style={styles.titleText}>
-            You are entering for {CompanyName(this.props.company)} at{" "}
-            {this.props.store}
+            Stock count for {this.props.product}
           </Text>
 
-          <Text style={styles.labelText}>Stock count for ?</Text>
+          <Text style={styles.labelText}>
+            Stock count for {this.props.product}
+          </Text>
           <TextInput
             keyboardType="numeric"
             style={styles.input}
@@ -41,12 +57,12 @@ class StockCountContainer extends Component {
           />
 
           <RoundedButton
-            onPress={() => navigate("Scan")}
-            text="Scan another product"
+            onPress={() => this.next()}
+            text="enter another product"
           />
 
           <RoundedButton
-            onPress={() => navigate("Promotion")}
+            onPress={() => this.finish()}
             text="Finish stock take"
           />
         </ScrollView>
@@ -55,19 +71,14 @@ class StockCountContainer extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    store: state.login.store,
-    company: state.login.company,
-    productList: state.login.productList
-  };
-};
+const mapStateToProps = state => ({
+  product: state.product.productId,
+  company: state.form.ClientId
+});
 
-const mapDispatchToProps = dispatch => {
-  return {
-    loginRequest: userName => dispatch(LoginActions.loginRequest(userName))
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  setNumber: num => dispatch(ProductActions.setNumber(num))
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   StockCountContainer

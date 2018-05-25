@@ -1,12 +1,12 @@
-import { createReducer, createActions } from "reduxsauce";
-import Immutable from "seamless-immutable";
+import { createReducer, createActions } from 'reduxsauce';
+import Immutable from 'seamless-immutable';
 
 /* ------------- Types and Action Creators ------------- */
 
 const { Types, Creators } = createActions({
-  setUnsent: ["unsent"],
-  sendUnsent: ["objectToSend"],
-  refreshUnsent: ["refresh"]
+  setUnsent: ['unsent'],
+  sendUnsent: ['objectToSend'],
+  refreshUnsent: ['refresh']
 });
 
 export const UnsentTypes = Types;
@@ -16,8 +16,8 @@ export default Creators;
 
 export const INITIAL_STATE = Immutable({
   unsent: [],
-  objectToSend: "",
-  refresh: false
+  objectToSend: '',
+  refresh: true
 });
 
 /* ------------- Reducers ------------- */
@@ -25,7 +25,7 @@ export const INITIAL_STATE = Immutable({
 export const setUnsent = (state, { unsent }) =>
   state.merge({ unsent });
 
-export const refreshUnsent  = (state, { refresh }) =>
+export const refreshUnsent = (state, { refresh }) =>
   state.merge({ refresh });
 
 export const sendUnsent = (state, { objectToSend }) =>

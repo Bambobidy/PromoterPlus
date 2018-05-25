@@ -1,21 +1,27 @@
-import { takeLatest, all } from "redux-saga/effects";
-import API from "../Services/Api";
-import FixtureAPI from "../Services/FixtureApi";
-import DebugConfig from "../Config/DebugConfig";
+import { takeLatest, all } from 'redux-saga/effects';
+import API from '../Services/Api';
+import FixtureAPI from '../Services/FixtureApi';
+import DebugConfig from '../Config/DebugConfig';
 
 /* ------------- Types ------------- */
 
-import { StartupTypes } from "../Redux/StartupRedux";
-import { GithubTypes } from "../Redux/GithubRedux";
-import { FormTypes } from "../Redux/FormRedux";
-import { UnsentTypes }from "../Redux/UnsentRedux";
+import { StartupTypes } from '../Redux/StartupRedux';
+import { GithubTypes } from '../Redux/GithubRedux';
+import { FormTypes } from '../Redux/FormRedux';
+import { UnsentTypes } from '../Redux/UnsentRedux';
+import { ProductTypes } from '../Redux/ProductRedux';
+import { FootTypes } from '../Redux/FootRedux';
+import { PhotoTypes } from '../Redux/PhotoRedux';
 
 /* ------------- Sagas ------------- */
 
-import { startup } from "./StartupSagas";
-import { getUserAvatar } from "./GithubSagas";
-import { sendForm, requestLogin } from "./FormSagas";
-import { sendUnsent } from "./UnsentSagas";
+import { startup } from './StartupSagas';
+import { getUserAvatar } from './GithubSagas';
+import { sendForm, requestLogin, stockList } from './FormSagas';
+import { sendUnsent } from './UnsentSagas';
+import { sendProduct } from './ProductSagas';
+import { sendTraffic } from './TrafficSagas';
+import { sendPhoto } from './PhotoSagas';
 
 /* ------------- API ------------- */
 
@@ -32,11 +38,22 @@ export default function* root() {
 
     takeLatest(FormTypes.LOGIN_REQUEST, requestLogin, api.loginRequest),
 
-    takeLatest(FormTypes.SET_FEEDBACK, sendForm, api.sendForm),
+    takeLatest(FormTypes.LOGIN_SUCCESS, stockList, api.stockList),
 
-    takeLatest(UnsentTypes.SEND_UNSENT, sendUnsent, api.sendForm),
+    takeLatest(ProductTypes.SET_NUMBER, sendProduct, api.sendProduct),
 
-    // some sagas receive extra parameters in addition to an action
-    takeLatest(GithubTypes.USER_REQUEST, getUserAvatar, api)
+    takeLatest(FormTypes.SET_FEEDBACK, sendForm, api.sendParticipant),
+
+    takeLatest(FootTypes.SEND_FOOT, sendTraffic, api.sendFoot),
+
+    takeLatest(PhotoTypes.SEND_PHOTO, sendPhoto, api.sendPhoto)
+
+    // takeLatest(FormTypes.LOGIN_REQUEST, requestLogin, api.loginRequest),
+
+    // takeLatest(ProductTypes.SET_NUMBER, sendProduct, api.sendProduct),
+
+    // takeLatest(UnsentTypes.SEND_UNSENT, sendUnsent, api.sendForm),
+
+    // takeLatest(GithubTypes.USER_REQUEST, getUserAvatar, api)
   ]);
 }
