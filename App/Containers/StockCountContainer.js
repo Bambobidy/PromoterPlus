@@ -25,13 +25,13 @@ class StockCountContainer extends Component {
 
   next = () => {
     const { navigate } = this.props.navigation;
-    // this.props.setNumber(this.count);
+    this.props.setNumber(this.count);
     navigate('StockList');
   };
 
   finish = () => {
     const { navigate } = this.props.navigation;
-    // this.props.setNumber(this.count);
+    this.props.setNumber(this.count);
     navigate('Promotion');
   }
 

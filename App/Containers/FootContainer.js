@@ -28,6 +28,10 @@ class FootContainer extends Component {
 
   state = { resetRace: null, resetAge: null, resetGender: null, resetBy: null };
 
+  componentDidMount = () => {
+    this.date = new Date();
+  };
+
   checkFoot = () => {
     this.props.sendFoot(this.state.resetAge, this.state.resetBy, this.state.resetGender, this.state.resetRace, getDate(), getDate());
     this.setState({
@@ -36,6 +40,10 @@ class FootContainer extends Component {
       resetGender: null,
       resetBy: null
     });
+    if (new Date() - this.date > (5 * 60 * 1000)) {
+      const { navigate } = this.props.navigation;
+      navigate('Promotion');
+    }
   }
 
   render() {

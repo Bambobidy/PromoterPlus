@@ -26,7 +26,7 @@ class Forms extends Component {
   constructRadioGroup(currElement) {
     return (
       <RadioButton key={currElement} value={currElement}>
-        <Text>{currElement}</Text>
+        <Text style={{ color: 'white' }}>{currElement}</Text>
       </RadioButton>
     );
   }
@@ -133,6 +133,8 @@ class Forms extends Component {
       <View style={styles.mainContainer}>
         <Text style={styles.titleText}>{this.props.header}</Text>
         <RadioGroup
+          color='white'
+          highlightColor='#ccc8b9'
           selectedIndex={this.state.reset}
           onSelect={(index, value) => this.setState({ value, reset: index })}
           id="group"

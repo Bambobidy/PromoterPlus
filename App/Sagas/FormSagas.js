@@ -1,17 +1,17 @@
 import { call, put, select } from 'redux-saga/effects';
 import FormActions from '../Redux/FormRedux';
 import UnsentActions from '../Redux/UnsentRedux';
-import { AsyncStorage } from 'react-native';
 
 export function* sendForm(api) {
   const object = yield select(state => state.form.sendObject);
+  console.log('Form', object);
   const token = yield select(state => state.form.token);
   try {
-    const response = yield call(api, { object, token });
-    if (response.problem) {
-      console.log(response.problem);
-    } else {
-      console.log(response);
+    const re = yield call(api, { object, token });
+    console.log('RE', re);
+    if (!re.ok) {
+      console.log('should call save object');
+      yield put(UnsentActions.saveObject({ api, data: { object, token } }));
     }
   } catch (err) {
     window.alert('Please let us know that an error has happened');
@@ -23,6 +23,7 @@ export function* requestLogin(
   { email, password, username, latitude, longitude }
 ) {
   try {
+    console.log('requestLogin', email, password, username, latitude, longitude);
     const response = yield call(api, {
       email,
       password,

@@ -46,7 +46,9 @@ export default function* root() {
 
     takeLatest(FootTypes.SEND_FOOT, sendTraffic, api.sendFoot),
 
-    takeLatest(PhotoTypes.SEND_PHOTO, sendPhoto, api.sendPhoto)
+    takeLatest(PhotoTypes.SEND_PHOTO, sendPhoto, api.sendPhoto),
+
+    takeLatest(UnsentTypes.SEND_UNSENT, sendUnsent)
 
     // takeLatest(FormTypes.LOGIN_REQUEST, requestLogin, api.loginRequest),
 

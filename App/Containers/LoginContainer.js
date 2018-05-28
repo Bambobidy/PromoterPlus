@@ -54,11 +54,9 @@ class LoginContainer extends Component {
     //   .catch(error => {
     //     console.log(error.message);
     //   });
-
     // BackHandler.addEventListener('hardwareBackPress', () => {
     //   LocationServicesDialogBox.forceCloseDialog();
     // });
-
     // DeviceEventEmitter.addListener('locationProviderStatusChange', status => {
     //   console.log(status);
     // });
@@ -66,6 +64,7 @@ class LoginContainer extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { navigate } = this.props.navigation;
+    console.log('Ok', nextProps.productList, nextProps.date);
     if (nextProps.productList !== '' && !nextProps.date) {
       this.props.setLoggedInDate(new Date());
       navigate('PhotoSign');
@@ -94,6 +93,8 @@ class LoginContainer extends Component {
             text="Let me in"
             onPress={() => {
               this.props.loginRequest(
+                'app@promoterplus.com',
+                'Password123',
                 this.username,
                 this.state.latitude,
                 this.state.longitude
@@ -112,11 +113,11 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  loginRequest: (username, latitude, longitude) =>
+  loginRequest: (email, password, username, latitude, longitude) =>
     dispatch(
       FormActions.loginRequest(
-        'app@promoterplus.com',
-        'Password123',
+        email,
+        password,
         username,
         latitude,
         longitude

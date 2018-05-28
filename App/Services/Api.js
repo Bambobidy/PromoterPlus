@@ -11,7 +11,7 @@ const create = (
     // here are some default headers
     headers: {
       'Cache-Control': 'no-cache',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/x-www-form-urlencoded'
     },
     // 10 second timeout...
     timeout: 10000
@@ -27,7 +27,7 @@ const create = (
     );
 
   const sendProduct = ({ token, productId, count }) =>
-    api.post(
+    api.get(
       'StockCounts',
       { productId, count },
       {
@@ -51,7 +51,7 @@ const create = (
     );
 
   const sendParticipant = ({ object, token }) =>
-    api.post('Participant', object, {
+    api.post('Participants', object, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `bearer ${token}`
@@ -78,14 +78,14 @@ const create = (
       }
     );
 
-  const sendPhoto = ({ token, form }) => {
+  const sendPhoto = ({ token, form }) =>
     api.post('Medias', form, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         Authorization: `bearer ${token}`
-      }
+      },
+      mimeType: 'multipart/form-data'
     });
-  };
 
   return {
     loginRequest,

@@ -1,32 +1,38 @@
-import ReduxPersist from '../Config/ReduxPersistConfig';
+import ReduxPersist from '../Config/ReduxPersist';
+import { AsyncStorage } from 'react-native';
 import { persistStore } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
 import StartupActions from '../Redux/StartupRedux';
+import DebugConfig from '../Config/DebugConfig';
 
-const reconcileStore = persistor => {
-  // Check to ensure latest reducer version
+const updateReducers = (store: Object) => {
   const reducerVersion = ReduxPersist.reducerVersion;
-  storage
-    .getItem('reducerVersion')
-    .then(localVersion => {
-      if (localVersion !== reducerVersion) {
-        // Purge store
-        persistor.purge();
-        storage.setItem('reducerVersion', reducerVersion);
-      }
-    })
-    .catch(() => {
-      storage.setItem('reducerVersion', reducerVersion);
-    });
-};
-
-const updateReducers = store => {
   const startup = () => store.dispatch(StartupActions.startup());
-  const persistor = persistStore(store, null, startup);
-  reconcileStore(persistor);
-  return persistor;
+
+  // Check to ensure latest reducer version
+  AsyncStorage.getItem('reducerVersion').then((localVersion) => {
+    if (localVersion !== reducerVersion) {
+      if (DebugConfig.useReactotron) {
+        console.tron.display({
+          name: 'PURGE',
+          value: {
+            'Old Version:': localVersion,
+            'New Version:': reducerVersion
+          },
+          preview: 'Reducer Version Change Detected',
+          important: true
+        });
+      }
+      // Purge store
+      persistStore(store, null, startup).purge();
+      AsyncStorage.setItem('reducerVersion', reducerVersion);
+    } else {
+      persistStore(store, null, startup);
+    }
+  }).catch(() => {
+    persistStore(store, null, startup);
+    AsyncStorage.setItem('reducerVersion', reducerVersion);
+  });
 };
 
-export default {
-  updateReducers
-};
+export default { updateReducers }
+;

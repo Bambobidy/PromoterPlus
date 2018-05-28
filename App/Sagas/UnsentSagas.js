@@ -1,23 +1,16 @@
-import { call, put, select } from 'redux-saga/effects';
-import { AsyncStorage } from 'react-native';
+import { call, put } from 'redux-saga/effects';
+import UnsentActions from '../Redux/UnsentRedux';
 
-export function* sendUnsent(api, { objectToSend }) {
+export function* sendUnsent({ toSend }) {
   try {
-    const response = yield call(api, { objectToSend });
-    if (response.problem) {
-      const call = response.config.url.substring(53);
-      const unsent = yield select(state => state.unsent.unsent);
-      AsyncStorage.setItem(
-        'Unsent',
-        JSON.stringify(
-          unsent.length === 0
-            ? [[call, objectToSend]]
-            : unsent.concat([[call, object]])
-        )
-      );
-    } else { 
+    for (let i = 0; i < toSend.length; i++) {
+      const re = yield call(toSend[i].api, toSend[i].data);
+      if (!re.ok) {
+        console.log('should call save object', re);
+        yield put(UnsentActions.saveObject({ api: toSend[i].api, data: toSend[i].data }));
+      }
     }
   } catch (err) {
-    window.alert('Please let us know that an error has happened');
+    window.alert(err);
   }
 }

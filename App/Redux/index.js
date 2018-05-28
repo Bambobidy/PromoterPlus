@@ -1,6 +1,9 @@
 import { combineReducers } from 'redux';
+import { persistReducer } from 'redux-persist';
 import configureStore from './CreateStore';
 import rootSaga from '../Sagas/';
+import ReduxPersist from '../Config/ReduxPersist';
+import { AsyncStorage } from 'react-native';
 
 /* ------------- Assemble The Reducers ------------- */
 export const reducers = combineReducers({
@@ -14,8 +17,24 @@ export const reducers = combineReducers({
 });
 
 export default () => {
+  const rootReducer = (state, action) => {
+    if (action.type === 'CLEAR_DATA') {
+      Object.keys(state).forEach(key => {
+        AsyncStorage.removeItem(`persist:${key}`);
+      });
+      state = undefined;
+    }
+    return reducers(state, action);
+  };
+
+  let finalReducers = reducers;
+  // If rehydration is on use persistReducer otherwise default combineReducers
+  if (ReduxPersist.active) {
+    finalReducers = persistReducer(ReduxPersist.storeConfig, rootReducer);
+  }
+
   let { store, sagasManager, sagaMiddleware } = configureStore(
-    reducers,
+    finalReducers,
     rootSaga
   );
 

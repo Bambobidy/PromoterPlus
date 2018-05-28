@@ -24,7 +24,7 @@ class PromotionContainer extends Component {
   };
 
   state = {
-    unsent: 0
+    unsent: this.props.objectToSend
   };
 
   componentWillReceiveProps(nextProps) {
@@ -40,31 +40,11 @@ class PromotionContainer extends Component {
             : question[nextProps.header].slice(1)
       });
     }
-    if (nextProps.refresh) {
-      this.refresh();
+    if (nextProps.objectToSend) {
+      console.log('next object', nextProps.objectToSend);
+      this.setState({ unsent: nextProps.objectToSend });
     }
   }
-
-  refresh() {
-    // try {
-    //   AsyncStorage.getItem('Unsent', (err, result) => {
-    //     if (result !== null) {
-    //       const arrResult = JSON.parse(result);
-    //       this.props.setUnsent(arrResult);
-    //       this.setState({
-    //         // unsent: `Click to send ${arrResult.length}`
-    //         unsent: `Click to send${this.state.unsent}`
-    //       });
-    //     }
-    //   });
-    // } catch (err) {}
-    // this.props.refreshUnsent(false);
-    this.setState({ unsent: 0 });
-  }
-
-  sendUnsent = () => {
-    this.setState({ unsent: 0 });
-  };
 
   render() {
     const { navigate } = this.props.navigation;
@@ -86,14 +66,11 @@ class PromotionContainer extends Component {
             text="Taster"
           />
 
-          <RoundedButton
-            onPress={() => navigate('Foot')}
-            text="Foot Traffic"
-          />
+          <RoundedButton onPress={() => navigate('Foot')} text="Foot Traffic" />
 
           <RoundedButton
-            onPress={() => this.sendUnsent()}
-            text={`click to send ${this.state.unsent}`}
+            onPress={() => this.props.sendUnsent(this.state.unsent)}
+            text={`click to send ${this.state.unsent.length}`}
           />
 
           <RoundedButton
@@ -113,6 +90,7 @@ class PromotionContainer extends Component {
           <RoundedButton
             text="log out"
             onPress={() => {
+              this.props.clearState();
               navigate('Login');
             }}
           />
@@ -125,12 +103,15 @@ class PromotionContainer extends Component {
 const mapStateToProps = state => ({
   unsent: state.unsent.unsent,
   refresh: state.unsent.refresh,
-  company: state.form.client
+  company: state.form.client,
+  objectToSend: state.unsent.objectToSend
 });
 
 const mapDispatchToProps = dispatch => ({
-  setUnsent: unsent => dispatch(UnsentActions.setUnsent(unsent)),
-  refreshUnsent: refresh => dispatch(UnsentActions.refreshUnsent(refresh))
+  sendUnsent: toSend => dispatch(UnsentActions.sendUnsent(toSend)),
+  clearState: () => {
+    dispatch({ type: 'CLEAR_DATA' });
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PromotionContainer);

@@ -1,11 +1,10 @@
 import { call, put, select } from 'redux-saga/effects';
-import { AsyncStorage } from 'react-native';
+import UnsentActions from '../Redux/UnsentRedux';
 
 export function* sendTraffic(
   api,
   { ageId, buyingPowerId, genderId, raceId, startTime, endTime }
 ) {
-  console.log(ageId, buyingPowerId, genderId, raceId, startTime, endTime);
   const token = yield select(state => state.form.token);
   try {
     const re = yield call(api, {
@@ -17,7 +16,11 @@ export function* sendTraffic(
       startTime,
       endTime
     });
-    console.log(re);
+    console.log(re); 
+    if (!re.ok) {
+      console.log('should call save object');
+      yield put(UnsentActions.saveObject({ api, data: { ageId, buyingPowerId, genderId, raceId, startTime, endTime } }));
+    }
   } catch (err) {
     window.alert('Please let us know that an error has happened');
   }

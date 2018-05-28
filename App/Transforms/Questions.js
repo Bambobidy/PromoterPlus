@@ -28,7 +28,7 @@ const question = {
   repeat: ['Repeat or first time', 'Repeat buyer', 'First time'],
   gender: ['Gender', 'Male', 'Female', 'Both'],
   age: ['Age', '16-20', '21-30', '31-50', '50+'],
-  race: ['Race', 'white', 'Black', 'Indian', 'Coloured', 'Asian'],
+  race: ['Race', 'White', 'Black', 'Indian', 'Coloured', 'Asian'],
   buyingPower: ['Buying power', 'Basket', 'Trolley', 'None'],
   productFeedback: [
     'Product feedback',
