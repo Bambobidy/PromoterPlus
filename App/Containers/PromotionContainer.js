@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import CompanyName from '../Transforms/CompanyNames';
 import styles from './Styles/LaunchScreenStyles';
+import TextStyles from '../Components/Styles/RNCamera';
 import RoundedButton from '../Components/RoundedButton';
 import { connect } from 'react-redux';
 import UnsentActions from '../Redux/UnsentRedux';
@@ -66,6 +67,18 @@ class PromotionContainer extends Component {
             text="Taster"
           />
 
+          {/* <View style={styles.row}>
+            <RoundedButton
+              onPress={() => navigate('Sales', { setParticipantTypeId: '1' })}
+              text="Sales"
+            />
+
+            <RoundedButton
+              onPress={() => navigate('Sales', { setParticipantTypeId: '2' })}
+              text="Taster"
+            />
+          </View> */}
+
           <RoundedButton onPress={() => navigate('Foot')} text="Foot Traffic" />
 
           <RoundedButton
@@ -76,7 +89,7 @@ class PromotionContainer extends Component {
           <RoundedButton
             text="take a pic"
             onPress={() => {
-              navigate('PhotoSign');
+              navigate('Photo');
             }}
           />
 

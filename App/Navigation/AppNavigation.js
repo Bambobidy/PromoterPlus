@@ -12,6 +12,7 @@ import Sales from '../Containers/SalesContainer';
 import Foot from '../Containers/FootContainer';
 import CantConnect from '../Containers/CantConnectContainer';
 import StockList from '../Containers/StockListContainer';
+import Photo from '../Containers/PhotoContainer';
 
 // Manifest of possible screens
 const PrimaryNav = StackNavigator(
@@ -27,7 +28,8 @@ const PrimaryNav = StackNavigator(
     Sales: { screen: Sales },
     Foot: { screen: Foot },
     CantConnect: { screen: CantConnect },
-    StockList: { screen: StockList }
+    StockList: { screen: StockList },
+    Photo: { screen: Photo }
   },
   {
     // Default config for all screens

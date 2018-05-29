@@ -10,7 +10,7 @@ import {
 import { RNCamera } from "react-native-camera";
 import { connect } from "react-redux";
 import LoggedInActions from "../Redux/LoggedInRedux";
-import styles from '../Components/Styles/RNCamera'
+import styles from "../Components/Styles/RNCamera";
 
 class PhotoStandContainer extends Component {
   static navigationOptions = {
@@ -20,6 +20,17 @@ class PhotoStandContainer extends Component {
   state = {
     taken: false,
     renderCam: true
+  };
+
+  skip = () => {
+    this.setState(
+      { renderCam: false },
+      this.navigate()
+    );
+  };
+
+  navigate = () => {
+    this.props.navigation.navigate("PhotoPromoter");
   };
 
   takePicture = async function() {
@@ -53,22 +64,16 @@ class PhotoStandContainer extends Component {
   render() {
     return (
       <View style={styles.container}>
-      {this.state.renderCam ? this.renderCamera() : null}
-        {/* <RNCamera
-          ref={ref => {
-            this.camera = ref;
-          }}
-          style={styles.preview}
-          type={RNCamera.Constants.Type.back}
-          flashMode={RNCamera.Constants.FlashMode.on}
-          permissionDialogTitle={"Permission to use camera"}
-          permissionDialogMessage={
-            "We need your permission to use your camera phone"
-          }
-        /> */}
-        <Text style={styles.capture} onPress={this.takePicture.bind(this)}>
-          [CAPTURE STAND]
-        </Text>
+        {this.state.renderCam ? this.renderCamera() : null}
+        <View style={styles.row}>
+          <Text style={styles.capture} onPress={this.takePicture.bind(this)}>
+            [CAPTURE STAND]
+          </Text>
+
+          <Text style={styles.capture} onPress={this.skip.bind(this)}>
+            [SKIP]
+          </Text>
+        </View>
       </View>
     );
   }

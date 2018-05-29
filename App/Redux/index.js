@@ -13,6 +13,7 @@ export const reducers = combineReducers({
   form: require('./FormRedux').reducer,
   unsent: require('./UnsentRedux').reducer,
   loggedIn: require('./LoggedInRedux').reducer,
+  tempLoggedIn: require('./TempLoginRedux').reducer,
   product: require('./ProductRedux').reducer
 });
 

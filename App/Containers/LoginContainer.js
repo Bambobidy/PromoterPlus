@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 // import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
 import RoundedButton from '../Components/RoundedButton';
 import FormActions from '../Redux/FormRedux';
+import TempLoginActions from '../Redux/TempLoginRedux';
 import LoggedInActions from '../Redux/LoggedInRedux';
 import styles from './Styles/LaunchScreenStyles';
 
@@ -64,8 +65,8 @@ class LoginContainer extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { navigate } = this.props.navigation;
-    console.log('Ok', nextProps.productList, nextProps.date);
     if (nextProps.productList !== '' && !nextProps.date) {
+      this.props.setLoggedIn();
       this.props.setLoggedInDate(new Date());
       navigate('PhotoSign');
     }
@@ -109,21 +110,17 @@ class LoginContainer extends Component {
 
 const mapStateToProps = state => ({
   date: state.loggedIn.date,
-  productList: state.form.productList
+  productList: state.form.productList,
+  stage: state.loggedIn.stage,
+  hasLoggedIn: state.tempLoggedIn.loggedIn
 });
 
 const mapDispatchToProps = dispatch => ({
   loginRequest: (email, password, username, latitude, longitude) =>
     dispatch(
-      FormActions.loginRequest(
-        email,
-        password,
-        username,
-        latitude,
-        longitude
-      )
+      FormActions.loginRequest(email, password, username, latitude, longitude)
     ),
-
+  setLoggedIn: () => dispatch(TempLoginActions.setLoggedIn()),
   setLoggedInDate: date => dispatch(LoggedInActions.setLoggedInDate(date))
 });
 

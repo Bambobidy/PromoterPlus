@@ -10,8 +10,19 @@ const create = (
     baseURL: awsURL,
     // here are some default headers
     headers: {
-      'Cache-Control': 'no-cache',
-      'Content-Type': 'application/x-www-form-urlencoded'
+      'Cache-Control': 'no-cache'
+    },
+    // 10 second timeout...
+    timeout: 10000
+  });
+
+  const api2 = apisauce.create({
+    // base URL is read from the "constructor"
+    baseURL: awsURL,
+    // here are some default headers
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      'Cache-Control': 'no-cache'
     },
     // 10 second timeout...
     timeout: 10000
@@ -78,14 +89,12 @@ const create = (
       }
     );
 
-  const sendPhoto = ({ token, form }) =>
-    api.post('Medias', form, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization: `bearer ${token}`
-      },
-      mimeType: 'multipart/form-data'
-    });
+  const sendPhoto = ({ token, form }) => {
+    console.log('FORM', form);
+    api2.setHeader('Authorization', `Bearer ${token}`);
+    api2.setHeader('content-Type', 'multipart/form-data');
+    return api2.post('Medias', form);
+  };
 
   return {
     loginRequest,

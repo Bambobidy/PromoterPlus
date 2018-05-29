@@ -1,6 +1,6 @@
-import Fonts from './Fonts'
-import Metrics from './Metrics'
-import Colors from './Colors'
+import Fonts from './Fonts';
+import Metrics from './Metrics';
+import Colors from './Colors';
 
 // This file is for a reusable grouping of Theme items.
 // Similar to an XML fragment layout in Android
@@ -52,12 +52,18 @@ const ApplicationStyles = {
       fontSize: 15,
       color: Colors.snow,
       marginBottom: Metrics.baseMargin,
-      marginHorizontal: Metrics.section,
+      marginHorizontal: Metrics.section
     },
     input: {
       backgroundColor: Colors.snow,
       borderRadius: 5,
       marginHorizontal: Metrics.section
+    },
+    row: {
+      flex: 0,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center'
     }
   },
   darkLabelContainer: {
@@ -89,6 +95,6 @@ const ApplicationStyles = {
     alignItems: 'center',
     textAlign: 'center'
   }
-}
+};
 
-export default ApplicationStyles
+export default ApplicationStyles;

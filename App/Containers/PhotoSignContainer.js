@@ -23,19 +23,34 @@ class PhotoSignContainer extends Component {
     renderCam: true
   };
 
+  skip = () => {
+    this.setState(
+      { renderCam: false },
+      this.navigate()
+    );
+  };
+
+  navigate = () => {
+    this.props.navigation.navigate("PhotoStand");
+  };
+
   takePicture = async function() {
     if (this.camera) {
       const options = { quality: 0.5, base64: true };
       const data = await this.camera.takePictureAsync(options);
-      this.setState({ renderCam: false });
-      let form = new FormData();
-      form.append("file", data.uri);
-      form.append("mediaTypeId", "1");
-      console.log("form", form);
-      this.props.sendPhoto(form);
-      const { navigate } = this.props.navigation;
-      navigate("PhotoStand");
+      console.log("after");
+      this.setState({ renderCam: false }, this.afterPicture(data));
     }
+  };
+
+  afterPicture = data => {
+    let form = new originalFormData();
+    form.append("file", data.uri);
+    form.append("mediaTypeId", "1");
+    console.log("form", form);
+    this.props.sendPhoto(form);
+    const { navigate } = this.props.navigation;
+    navigate("PhotoStand");
   };
 
   renderCamera = () => {
@@ -59,21 +74,15 @@ class PhotoSignContainer extends Component {
     return (
       <View style={styles.container}>
         {this.state.renderCam ? this.renderCamera() : null}
-        {/* <RNCamera
-          ref={ref => {
-            this.camera = ref;
-          }}
-          style={styles.preview}
-          type={RNCamera.Constants.Type.back}
-          flashMode={RNCamera.Constants.FlashMode.on}
-          permissionDialogTitle={"Permission to use camera"}
-          permissionDialogMessage={
-            "We need your permission to use your camera phone"
-          }
-        /> */}
-        <Text style={styles.capture} onPress={this.takePicture.bind(this)}>
-          [CAPTURE SING IN SHEET]
-        </Text>
+        <View style={styles.row}>
+          <Text style={styles.capture} onPress={this.takePicture.bind(this)}>
+            [CAPTURE SING IN SHEET]
+          </Text>
+
+          <Text style={styles.capture} onPress={this.skip.bind(this)}>
+            [SKIP]
+          </Text>
+        </View>
       </View>
     );
   }
