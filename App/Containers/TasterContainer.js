@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Alert,
   ScrollView,
@@ -11,25 +11,25 @@ import {
   AppState,
   AsyncStorage,
   ToastAndroid
-} from "react-native";
-import styles from "./Styles/LaunchScreenStyles";
-import RoundedButton from "../Components/RoundedButton";
-import Forms from "../Components/Forms";
-import { connect } from "react-redux";
-import { RadioGroup, RadioButton } from "react-native-flexi-radio-button";
-import { productDairyMaid, question } from "../Transforms/Questions";
-import FormActions from "../Redux/FormRedux";
+} from 'react-native';
+import styles from './Styles/LaunchScreenStyles';
+import RoundedButton from '../Components/RoundedButton';
+import Forms from '../Components/Forms';
+import { connect } from 'react-redux';
+import { RadioGroup, RadioButton } from 'react-native-flexi-radio-button';
+import { productDairyMaid, question } from '../Transforms/Questions';
+import FormActions from '../Redux/FormRedux';
 
 class TasterContainer extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.header) {
       this.setState({
         header:
-          nextProps.header === "product"
-            ? "Product"
+          nextProps.header === 'product'
+            ? 'Product'
             : question[nextProps.header][0],
         list:
-          nextProps.header === "product"
+          nextProps.header === 'product'
             ? this.props.productList
             : question[nextProps.header].slice(1)
       });
@@ -41,11 +41,11 @@ class TasterContainer extends Component {
   }
 
   static navigationOptions = {
-    title: "Taster"
+    title: 'Taster'
   };
 
   state = {
-    header: "Product",
+    header: 'Product',
     list: this.props.productList
   };
 
@@ -61,17 +61,13 @@ class TasterContainer extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
+const mapDispatchToProps = dispatch => ({
     setParticipantTypeId: () => dispatch(FormActions.setParticipantTypeId("3"))
-  };
-};
+  });
 
-const mapStateToProps = state => {
-  return {
+const mapStateToProps = state => ({
     productList: state.form.productList,
     header: state.form.header
-  };
-};
+  });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TasterContainer);

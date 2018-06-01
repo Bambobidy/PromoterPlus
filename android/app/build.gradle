@@ -101,7 +101,7 @@ android {
         applicationId "com.promoterplus"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 10
+        versionCode 12
         versionName "1.0.2"
         ndk {
             abiFilters "armeabi-v7a", "x86"

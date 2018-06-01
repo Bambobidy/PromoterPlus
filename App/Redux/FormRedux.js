@@ -48,7 +48,8 @@ export const INITIAL_STATE = Immutable({
     raceId: '',
     repetitionTypeId: '',
     startTime: '',
-    endTime: ''
+    endTime: '',
+    date: null,
   }
 });
 
@@ -70,7 +71,7 @@ export const loginRequest = (
 export const loginFailure = state => state.merge({ error: true });
 
 export const loginSuccess = (state, { token }) =>
-  state.merge({ token, error: false });
+  state.merge({ token, error: false, date: new Date().getDate() });
 
 export const setProductList = (state, { productList, client }) =>
   state.merge({

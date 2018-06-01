@@ -66,9 +66,13 @@ class LoginContainer extends Component {
   componentWillReceiveProps(nextProps) {
     const { navigate } = this.props.navigation;
     if (nextProps.productList !== '' && !nextProps.date) {
-      this.props.setLoggedIn();
-      this.props.setLoggedInDate(new Date());
-      navigate('PhotoSign');
+      console.log(nextProps.loginDate, new Date().getDate());
+      if (nextProps.loginDate === new Date().getDate()) {
+        console.log('Date', nextProps.loginDate);
+        this.props.setLoggedIn();
+        this.props.setLoggedInDate(new Date());
+        navigate('PhotoSign');
+      }
     }
   }
 
@@ -109,6 +113,7 @@ class LoginContainer extends Component {
 }
 
 const mapStateToProps = state => ({
+  loginDate: state.form.date,
   date: state.loggedIn.date,
   productList: state.form.productList,
   stage: state.loggedIn.stage,

@@ -24,10 +24,7 @@ class PhotoSignContainer extends Component {
   };
 
   skip = () => {
-    this.setState(
-      { renderCam: false },
-      this.navigate()
-    );
+    this.setState({ renderCam: false }, this.navigate());
   };
 
   navigate = () => {
@@ -38,16 +35,14 @@ class PhotoSignContainer extends Component {
     if (this.camera) {
       const options = { quality: 0.5, base64: true };
       const data = await this.camera.takePictureAsync(options);
-      console.log("after");
       this.setState({ renderCam: false }, this.afterPicture(data));
     }
   };
 
   afterPicture = data => {
-    let form = new originalFormData();
-    form.append("file", data.uri);
+    let form = new FormData();
+    form.append("file", { uri: data.uri, type: "image/jpg", name: "image" });
     form.append("mediaTypeId", "1");
-    console.log("form", form);
     this.props.sendPhoto(form);
     const { navigate } = this.props.navigation;
     navigate("PhotoStand");

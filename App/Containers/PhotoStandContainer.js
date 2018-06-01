@@ -11,6 +11,7 @@ import { RNCamera } from "react-native-camera";
 import { connect } from "react-redux";
 import LoggedInActions from "../Redux/LoggedInRedux";
 import styles from "../Components/Styles/RNCamera";
+import PhotoActions from "../Redux/PhotoRedux";
 
 class PhotoStandContainer extends Component {
   static navigationOptions = {
@@ -37,11 +38,17 @@ class PhotoStandContainer extends Component {
     if (this.camera) {
       const options = { quality: 0.5, base64: true };
       const data = await this.camera.takePictureAsync(options);
-      this.setState({ renderCam: false });
-      console.log(data);
-      const { navigate } = this.props.navigation;
-      navigate("PhotoPromoter");
+      this.setState({ renderCam: false }, this.afterPicture(data));
     }
+  };
+
+  afterPicture = data => {
+    let form = new FormData();
+    form.append("file", { uri: data.uri, type: "image/jpg", name: "image" });
+    form.append("mediaTypeId", "2");
+    this.props.sendPhoto(form);
+    const { navigate } = this.props.navigation;
+    navigate("PhotoPromoter");
   };
 
   renderCamera = () => {
@@ -80,7 +87,8 @@ class PhotoStandContainer extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  setPhotoSign: data => dispatch(LoggedInActions.setPhotoSign(data))
+  setPhotoSign: data => dispatch(LoggedInActions.setPhotoSign(data)),
+  sendPhoto: data => dispatch(PhotoActions.sendPhoto(data))
 });
 
 export default connect(null, mapDispatchToProps)(PhotoStandContainer);

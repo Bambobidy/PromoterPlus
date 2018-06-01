@@ -48,7 +48,7 @@ export function* stockList(api, { token }) {
     const response = yield call(api, {
       token
     });
-    console.log(response);
+    console.log('stock', response);
     yield put(
       FormActions.setProductList(response.data.products, response.data.client)
     );

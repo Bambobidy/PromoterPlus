@@ -85,24 +85,24 @@ class FootContainer extends Component {
                 this.setState({ race: value, resetRace: index })
               }
             >
-              <RadioButton style={{ color: 'white' }} value={'White'}>
-                <Text>White</Text>
+              <RadioButton value={'White'}>
+                <Text style={{ color: 'white' }}>White</Text>
               </RadioButton>
 
-              <RadioButton style={{ color: 'white' }} value={'Black'}>
-                <Text>Black</Text>
+              <RadioButton value={'Black'}>
+                <Text style={{ color: 'white' }}>Black</Text>
               </RadioButton>
 
-              <RadioButton style={{ color: 'white' }} value={'Indian'}>
-                <Text>Indian</Text>
+              <RadioButton value={'Indian'}>
+                <Text style={{ color: 'white' }}>Indian</Text>
               </RadioButton>
 
-              <RadioButton style={{ color: 'white' }} value={'Coloured'}>
-                <Text>Coloured</Text>
+              <RadioButton value={'Coloured'}>
+                <Text style={{ color: 'white' }}>Coloured</Text>
               </RadioButton>
 
-              <RadioButton style={{ color: 'white' }} value={'Asian'}>
-                <Text>Asian</Text>
+              <RadioButton value={'Asian'}>
+                <Text style={{ color: 'white' }}>Asian</Text>
               </RadioButton>
             </RadioGroup>
 
@@ -114,20 +114,20 @@ class FootContainer extends Component {
                 this.setState({ race: value, resetAge: index })
               }
             >
-              <RadioButton style={{ color: 'white' }} value={'16-20'}>
-                <Text>16-20</Text>
+              <RadioButton value={'16-20'}>
+                <Text style={{ color: 'white' }}>16-20</Text>
               </RadioButton>
 
-              <RadioButton style={{ color: 'white' }} value={'21-30'}>
-                <Text>21-30</Text>
+              <RadioButton value={'21-30'}>
+                <Text style={{ color: 'white' }}>21-30</Text>
               </RadioButton>
 
-              <RadioButton style={{ color: 'white' }} value={'31-50'}>
-                <Text>31-50</Text>
+              <RadioButton value={'31-50'}>
+                <Text style={{ color: 'white' }}>31-50</Text>
               </RadioButton>
 
-              <RadioButton style={{ color: 'white' }} value={'50+'}>
-                <Text>50+</Text>
+              <RadioButton value={'50+'}>
+                <Text style={{ color: 'white' }}>50+</Text>
               </RadioButton>
             </RadioGroup>
           </View>
@@ -159,16 +159,16 @@ class FootContainer extends Component {
                 this.setState({ race: value, resetGender: index })
               }
             >
-              <RadioButton style={{ color: 'white' }} value={'Male'}>
-                <Text>Male</Text>
+              <RadioButton value={'Male'}>
+                <Text style={{ color: 'white' }}>Male</Text>
               </RadioButton>
 
-              <RadioButton style={{ color: 'white' }} value={'Female'}>
-                <Text>Female</Text>
+              <RadioButton value={'Female'}>
+                <Text style={{ color: 'white' }}>Female</Text>
               </RadioButton>
 
-              <RadioButton style={{ color: 'white' }} value={'Both'}>
-                <Text>Both</Text>
+              <RadioButton value={'Both'}>
+                <Text style={{ color: 'white' }}>Both</Text>
               </RadioButton>
             </RadioGroup>
 
@@ -180,16 +180,16 @@ class FootContainer extends Component {
                 this.setState({ race: value, resetBy: index })
               }
             >
-              <RadioButton style={{ color: 'white' }} value={'Basket'}>
-                <Text>Basket</Text>
+              <RadioButton value={'Basket'}>
+                <Text style={{ color: 'white' }}>Basket</Text>
               </RadioButton>
 
-              <RadioButton style={{ color: 'white' }} value={'Trolley'}>
-                <Text>Trolley</Text>
+              <RadioButton value={'Trolley'}>
+                <Text style={{ color: 'white' }}>Trolley</Text>
               </RadioButton>
 
-              <RadioButton style={{ color: 'white' }} value={'None'}>
-                <Text>None</Text>
+              <RadioButton value={'None'}>
+                <Text style={{ color: 'white' }}>None</Text>
               </RadioButton>
             </RadioGroup>
           </View>

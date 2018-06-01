@@ -90,9 +90,8 @@ const create = (
     );
 
   const sendPhoto = ({ token, form }) => {
-    console.log('FORM', form);
-    api2.setHeader('Authorization', `Bearer ${token}`);
     api2.setHeader('content-Type', 'multipart/form-data');
+    api2.setHeader('Authorization', `Bearer ${token}`);
     return api2.post('Medias', form);
   };
 
