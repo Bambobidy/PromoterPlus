@@ -103,8 +103,13 @@ class PromotionContainer extends Component {
           <RoundedButton
             text="log out"
             onPress={() => {
-              this.props.clearState();
-              navigate('Login');
+              if (this.state.unsent.length) {
+                window.alert('Please send all unsent before logging out');
+                this.props.sendUnsent(this.state.unsent);
+              } else {
+                this.props.clearState();
+                navigate('Login');
+              }
             }}
           />
         </ScrollView>
