@@ -21,7 +21,7 @@ import ProductActions from '../Redux/ProductRedux';
 import getDate from '../Transforms/Date';
 
 class Forms extends Component {
-  state = { reset: null };
+  state = { reset: null, value: '' };
 
   constructRadioGroup(currElement) {
     return (
@@ -35,10 +35,14 @@ class Forms extends Component {
     switch (this.props.header) {
       case 'Product':
         {
-          const productId = this.props.productList.find(
-            el => el.label === this.state.value
-          ).id;
-          this.props.setProduct(productId, 'repeat', getDate());
+          if (this.state.value !== '') {
+            const productId = this.props.productList.find(
+              el => el.label === this.state.value
+            ).id;
+            this.props.setProduct(productId, 'repeat', getDate());
+          } else {
+            window.alert('please enter a product');
+          }
         }
         break;
       case 'Repeat or first time':
@@ -74,8 +78,12 @@ class Forms extends Component {
         break;
       case 'Products list for stock count':
         {
-          this.props.setProductStock(this.state.value);
-          this.props.navigate('StockCount');
+          if (this.state.value !== '') {
+            this.props.setProductStock(this.state.value);
+            this.props.navigate('StockCount');
+          } else {
+            window.alert('please enter a product');
+          }
         }
         break;
       default: {
@@ -133,8 +141,8 @@ class Forms extends Component {
       <View style={styles.mainContainer}>
         <Text style={styles.titleText}>{this.props.header}</Text>
         <RadioGroup
-          color='white'
-          highlightColor='#ccc8b9'
+          color="white"
+          highlightColor="#ccc8b9"
           selectedIndex={this.state.reset}
           onSelect={(index, value) => this.setState({ value, reset: index })}
           id="group"
@@ -159,7 +167,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   setProductStock: product => dispatch(ProductActions.setProductStock(product)),
 
-
   setProduct: (value, header, time) =>
     dispatch(FormActions.setProduct(value, header, time)),
 
@@ -177,8 +184,10 @@ const mapDispatchToProps = dispatch => ({
 
   setGender: (value, header) => dispatch(FormActions.setGender(value, header)),
 
-
   goBack: header => dispatch(FormActions.goBack(header))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Forms);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Forms);

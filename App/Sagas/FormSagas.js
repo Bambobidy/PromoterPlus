@@ -3,6 +3,7 @@ import FormActions from '../Redux/FormRedux';
 import UnsentActions from '../Redux/UnsentRedux';
 
 export function* sendForm(api) {
+  const apiName = 'sendParticipant';
   const object = yield select(state => state.form.sendObject);
   console.log('Form', object);
   const token = yield select(state => state.form.token);
@@ -11,7 +12,9 @@ export function* sendForm(api) {
     console.log('RE', re);
     if (!re.ok) {
       console.log('should call save object');
-      yield put(UnsentActions.saveObject({ api, data: { object, token } }));
+      yield put(
+        UnsentActions.saveObject({ api: apiName, data: { object, token } })
+      );
     }
   } catch (err) {
     window.alert('Please let us know that an error has happened');
