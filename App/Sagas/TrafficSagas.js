@@ -20,7 +20,7 @@ export function* sendTraffic(
     console.log(re); 
     if (!re.ok) {
       console.log('should call save object');
-      yield put(UnsentActions.saveObject({ api: apiName, data: { ageId, buyingPowerId, genderId, raceId, startTime, endTime } }));
+      yield put(UnsentActions.saveObject({ api: apiName, data: { token, ageId, buyingPowerId, genderId, raceId, startTime, endTime } }));
     }
   } catch (err) {
     window.alert('Please let us know that an error has happened');

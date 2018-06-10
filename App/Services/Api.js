@@ -38,7 +38,7 @@ const create = (
     );
 
   const sendProduct = ({ token, productId, count }) =>
-    api.get(
+    api.post(
       'StockCounts',
       { productId, count },
       {
@@ -100,9 +100,7 @@ const create = (
     sendPhoto,
     sendProduct,
     stockList,
-
     sendParticipant,
-
     sendFoot
   };
 };

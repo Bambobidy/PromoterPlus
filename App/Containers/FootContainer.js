@@ -34,10 +34,10 @@ class FootContainer extends Component {
 
   checkFoot = () => {
     this.props.sendFoot(
-      this.state.resetAge,
-      this.state.resetBy,
-      this.state.resetGender,
-      this.state.resetRace,
+      this.state.resetAge + 1,
+      this.state.resetBy + 1,
+      this.state.resetGender + 1,
+      this.state.resetRace + 1,
       getDate(),
       getDate()
     );
@@ -215,4 +215,7 @@ const mapDispatchToProps = dispatch => ({
     )
 });
 
-export default connect(null, mapDispatchToProps)(FootContainer);
+export default connect(
+  null,
+  mapDispatchToProps
+)(FootContainer);

@@ -9,9 +9,11 @@ const { Types, Creators } = createActions({
   loginFailure: [],
   setProductList: ['productList', 'client'],
 
+  setFoot: ['race', 'age', 'gender', 'buyingPower', 'header'],
+
   setPromotionInfo: ['clientId', 'location', 'productList'],
   setParticipantTypeId: ['participantTypeId'],
-  setProduct: ['product', 'header'],
+  setProduct: ['product', 'header', 'time'],
   setAge: ['age', 'header'],
   setBuyingPower: ['buyingPower', 'header'],
   setFeedback: ['feedback', 'time'],
@@ -49,7 +51,7 @@ export const INITIAL_STATE = Immutable({
     repetitionTypeId: '',
     startTime: '',
     endTime: '',
-    date: null,
+    date: null
   }
 });
 
@@ -69,6 +71,18 @@ export const loginRequest = (
   });
 
 export const loginFailure = state => state.merge({ error: true });
+
+export const setFoot = (state, { race, age, gender, buyingPower, header }) =>
+  state.merge({
+    sendObject: {
+      ...state.sendObject,
+      raceId: race,
+      ageId: age,
+      genderId: gender,
+      buyingPowerId: buyingPower
+    },
+    header
+  });
 
 export const loginSuccess = (state, { token }) =>
   state.merge({ token, error: false, date: new Date().getDate() });
@@ -130,6 +144,7 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.LOGIN_REQUEST]: loginRequest,
   [Types.LOGIN_SUCCESS]: loginSuccess,
   [Types.SET_PRODUCT_LIST]: setProductList,
+  [Types.SET_FOOT]: setFoot,
 
   // [Types.SET_PROMOTION_INFO]: setPromotionInfo,
   [Types.SET_PARTICIPANT_TYPE_ID]: setParticipantTypeId,

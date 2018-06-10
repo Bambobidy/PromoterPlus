@@ -18,6 +18,7 @@ import TextStyles from '../Components/Styles/RNCamera';
 import RoundedButton from '../Components/RoundedButton';
 import { connect } from 'react-redux';
 import UnsentActions from '../Redux/UnsentRedux';
+import question from '../Transforms/Questions';
 
 class PromotionContainer extends Component {
   static navigationOptions = {

@@ -101,7 +101,7 @@ android {
         applicationId "com.promoterplus"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 14
+        versionCode 15
         versionName "1.0.2"
         ndk {
             abiFilters "armeabi-v7a", "x86"
@@ -146,8 +146,6 @@ android {
 }
 
 dependencies {
-    // compile project(':react-native-android-location-services-dialog-box')
-    // compile project(':react-native-fused-location')
     compile project(':react-native-camera'){
         compile 'com.android.support:exifinterface:27.1.0'
         compile ('com.google.android.gms:play-services-vision:12.0.1') {

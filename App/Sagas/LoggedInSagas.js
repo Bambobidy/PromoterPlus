@@ -1,9 +1,9 @@
-import { call, put, select } from 'redux-saga/effects';
-import { AsyncStorage } from 'react-native';
+import { call } from 'redux-saga/effects';
 
 export function* sendProduct(api, { mediaTypeId }) {
   try {
-    yield call(api, { mediaTypeId });
+    const re = yield call(api, { mediaTypeId });
+    console.log('SENDING PHOTOS', re);
   } catch (err) {
     window.alert('Please let us know that an error has happened');
   }

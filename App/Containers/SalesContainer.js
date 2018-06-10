@@ -22,7 +22,9 @@ import FormActions from '../Redux/FormRedux';
 
 class SalesContainer extends Component {
   componentWillReceiveProps(nextProps) {
+    console.log('next', nextProps.header);
     if (nextProps.header) {
+      console.log('next', nextProps.header);
       this.setState({
         header:
           nextProps.header === 'product'
@@ -37,7 +39,9 @@ class SalesContainer extends Component {
   }
 
   componentDidMount() {
-    this.props.setParticipantTypeId(this.props.navigation.state.params.setParticipantTypeId);
+    this.props.setParticipantTypeId(
+      this.props.navigation.state.params.setParticipantTypeId
+    );
   }
 
   static navigationOptions = {
@@ -55,7 +59,11 @@ class SalesContainer extends Component {
     return (
       <View style={styles.mainContainer}>
         <ScrollView style={styles.container}>
-          <Forms header={this.state.header} list={this.state.list} navigate={navigate} />
+          <Forms
+            header={this.state.header}
+            list={this.state.list}
+            navigate={navigate}
+          />
         </ScrollView>
       </View>
     );
@@ -63,12 +71,16 @@ class SalesContainer extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-    setParticipantTypeId: participantTypeId => dispatch(FormActions.setParticipantTypeId(participantTypeId))
-  });
+  setParticipantTypeId: participantTypeId =>
+    dispatch(FormActions.setParticipantTypeId(participantTypeId))
+});
 
 const mapStateToProps = state => ({
-    productList: state.form.productList,
-    header: state.form.header
-  });
+  productList: state.form.productList,
+  header: state.form.header
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(SalesContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SalesContainer);
