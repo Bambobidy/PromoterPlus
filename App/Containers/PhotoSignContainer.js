@@ -43,10 +43,46 @@ class PhotoSignContainer extends Component {
     let form = new FormData();
     form.append("file", { uri: data.uri, type: "image/jpg", name: "image" });
     form.append("mediaTypeId", "1");
+    form.append("promotionId", this.props.promotionId);
+    form.append("longitude", this.state.longitude);
+    form.append("latitude", this.state.latitude);
     this.props.sendPhoto(form);
     const { navigate } = this.props.navigation;
     navigate("PhotoStand");
   };
+
+  componentDidMount() {
+    this.getLocation();
+    this.interval = setInterval(() => {
+      this.getLocation();
+    }, 5000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+  getLocation() {
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        console.log(position.coords.longitude, position.coords.latitude);
+        clearInterval(this.interval);
+        this.setState(
+          {
+            longitude: position.coords.longitude,
+            latitude: position.coords.latitude
+          },
+          this.state.called ? this.next() : null
+        );
+      },
+      error => {
+        console.log(error);
+        if (error.code === 2) {
+          window.alert("Please turn on your location");
+        }
+      }
+    );
+  }
 
   renderCamera = () => {
     return (
@@ -88,4 +124,11 @@ const mapDispatchToProps = dispatch => ({
   sendPhoto: data => dispatch(PhotoActions.sendPhoto(data))
 });
 
-export default connect(null, mapDispatchToProps)(PhotoSignContainer);
+const mapStateToProps = state => ({
+  promotionId: state.form.sendObject.promotionId
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PhotoSignContainer);

@@ -37,10 +37,10 @@ const create = (
       }
     );
 
-  const sendProduct = ({ token, productId, count }) =>
+  const sendProduct = ({ token, promotionId, productId, count }) =>
     api.post(
       'StockCounts',
-      { productId, count },
+      { productId, count, promotionId },
       {
         headers: {
           'Content-Type': 'application/json',
@@ -76,11 +76,12 @@ const create = (
     genderId,
     raceId,
     startTime,
-    endTime
+    endTime,
+    promotionId
   }) =>
     api.post(
       'Traffic',
-      { ageId, buyingPowerId, genderId, raceId, startTime, endTime },
+      { ageId, buyingPowerId, genderId, raceId, startTime, endTime, promotionId },
       {
         headers: {
           'Content-Type': 'application/json',

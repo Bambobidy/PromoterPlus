@@ -10,6 +10,9 @@ const { Types, Creators } = createActions({
   setProductList: ['productList', 'client'],
 
   setFoot: ['race', 'age', 'gender', 'buyingPower', 'header'],
+  promo: ['promoInfo'],
+
+  setPromotionId: ['promotionId'],
 
   setPromotionInfo: ['clientId', 'location', 'productList'],
   setParticipantTypeId: ['participantTypeId'],
@@ -34,6 +37,8 @@ export const INITIAL_STATE = Immutable({
   username: '',
   latitude: '',
   longitude: '',
+  promoInfo: '',
+  promotionId: '',
 
   token: '',
   error: '',
@@ -51,6 +56,7 @@ export const INITIAL_STATE = Immutable({
     repetitionTypeId: '',
     startTime: '',
     endTime: '',
+    promotionId: '',
     date: null
   }
 });
@@ -138,6 +144,18 @@ export const goBack = (state, { header }) =>
     header
   });
 
+export const promo = (state, { promoInfo }) =>
+  state.merge({
+    promoInfo
+  });
+
+export const setPromotionId = (state, { promotionId }) =>
+  state.merge({
+    sendObject: {
+      ...state.sendObject,
+      promotionId
+    }
+  });
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
@@ -155,5 +173,7 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.SET_REPETITION]: setRepetition,
   [Types.SET_RACE]: setRace,
   [Types.SET_GENDER]: setGender,
-  [Types.GO_BACK]: goBack
+  [Types.GO_BACK]: goBack,
+  [Types.PROMO]: promo,
+  [Types.SET_PROMOTION_ID]: setPromotionId
 });

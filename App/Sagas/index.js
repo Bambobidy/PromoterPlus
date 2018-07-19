@@ -22,6 +22,7 @@ import { sendUnsent } from './UnsentSagas';
 import { sendProduct } from './ProductSagas';
 import { sendTraffic } from './TrafficSagas';
 import { sendPhoto } from './PhotoSagas';
+import { getCurrent } from '../Transforms/getCurrent';
 
 /* ------------- API ------------- */
 
@@ -46,9 +47,7 @@ export default function* root() {
 
     takeLatest(FootTypes.SEND_FOOT, sendTraffic, api.sendFoot),
 
-    takeLatest(PhotoTypes.SEND_PHOTO, sendPhoto, api.sendPhoto),
-
-    takeLatest(UnsentTypes.SEND_UNSENT, sendUnsent)
+    takeLatest(PhotoTypes.SEND_PHOTO, sendPhoto, api.sendPhoto)
 
     // takeLatest(FormTypes.LOGIN_REQUEST, requestLogin, api.loginRequest),
 

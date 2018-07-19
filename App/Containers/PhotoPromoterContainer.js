@@ -10,7 +10,7 @@ import {
 import { RNCamera } from "react-native-camera";
 import { connect } from "react-redux";
 import LoggedInActions from "../Redux/LoggedInRedux";
-import styles from '../Components/Styles/RNCamera';
+import styles from "../Components/Styles/RNCamera";
 import PhotoActions from "../Redux/PhotoRedux";
 
 class PhotoStandContainer extends Component {
@@ -24,10 +24,7 @@ class PhotoStandContainer extends Component {
   };
 
   skip = () => {
-    this.setState(
-      { renderCam: false },
-      this.navigate()
-    );
+    this.setState({ renderCam: false }, this.navigate());
   };
 
   navigate = () => {
@@ -46,6 +43,7 @@ class PhotoStandContainer extends Component {
     let form = new FormData();
     form.append("file", { uri: data.uri, type: "image/jpg", name: "image" });
     form.append("mediaTypeId", "3");
+    form.append("promotionId", this.props.promotionId);
     this.props.sendPhoto(form);
     const { navigate } = this.props.navigation;
     navigate("StockList");
@@ -71,8 +69,8 @@ class PhotoStandContainer extends Component {
   render() {
     return (
       <View style={styles.container}>
-      {this.state.renderCam ? this.renderCamera() : null}
-      <View style={styles.row}>
+        {this.state.renderCam ? this.renderCamera() : null}
+        <View style={styles.row}>
           <Text style={styles.capture} onPress={this.takePicture.bind(this)}>
             [CAPTURE PROMOTER]
           </Text>
@@ -91,4 +89,11 @@ const mapDispatchToProps = dispatch => ({
   sendPhoto: data => dispatch(PhotoActions.sendPhoto(data))
 });
 
-export default connect(null, mapDispatchToProps)(PhotoStandContainer);
+const mapStateToProps = state => ({
+  promotionId: state.form.sendObject.promotionId
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PhotoStandContainer);

@@ -13,54 +13,51 @@ class LoginContainer extends Component {
   };
 
   state = {
-    longitude: false,
-    latitude: false,
+    longitude: 28.035048,
+    latitude: -26.1286031,
     called: false
   };
 
-  componentDidMount() {
-    this.getLocation();
-    this.interval = setInterval(() => {
-      this.getLocation();
-    }, 5000);
-  }
+  // componentDidMount() {
+  //   this.getLocation();
+  //   this.interval = setInterval(() => {
+  //     this.getLocation();
+  //   }, 5000);
+  // }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.productList !== '' && !nextProps.date) {
-      if (nextProps.loginDate === new Date().getDate()) {
-        this.getLocation();
-        this.props.setLoggedIn();
-        this.props.setLoggedInDate(new Date());
-        this.props.navigation.navigate('PhotoSign');
-      }
+      this.props.setLoggedIn();
+      this.props.setLoggedInDate(new Date());
+      this.props.navigation.navigate('PhotoSign');
     }
   }
 
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }
+  // componentWillUnmount() {
+  //   clearInterval(this.interval);
+  // }
 
-  getLocation() {
-    navigator.geolocation.getCurrentPosition(
-      position => {
-        console.log(position.coords.longitude, position.coords.latitude);
-        clearInterval(this.interval);
-        this.setState(
-          {
-            longitude: position.coords.longitude,
-            latitude: position.coords.latitude
-          },
-          this.state.called ? this.next() : null
-        );
-      },
-      error => {
-        console.log(error);
-        if (error.code === 2) {
-          window.alert('Please turn on your location');
-        }
-      }
-    );
-  }
+  // getLocation() {
+  //   navigator.geolocation.getCurrentPosition(
+  //     position => {
+  //       console.log(position.coords.longitude, position.coords.latitude);
+  //       clearInterval(this.interval);
+  //       this.setState(
+  //         {
+  //           longitude: position.coords.longitude,
+  //           latitude: position.coords.latitude
+  //         },
+  //         this.state.called ? this.next() : null
+  //       );
+  //     },
+  //     error => {
+  //       console.log(error);
+  //       if (error.code === 2) {
+  //         window.alert('Please turn on your location');
+  //       }
+  //     }
+  //   );
+  // }
 
   next() {
     this.props.loginRequest(
@@ -88,12 +85,7 @@ class LoginContainer extends Component {
 
           <RoundedButton
             text="Let me in"
-            onPress={() =>
-              this.setState(
-                { called: true },
-                !this.state.latitude ? this.getLocation() : this.next()
-              )
-            }
+            onPress={() => this.setState({ called: true }, this.next())}
           />
         </ScrollView>
       </View>

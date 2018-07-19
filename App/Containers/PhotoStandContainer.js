@@ -46,6 +46,7 @@ class PhotoStandContainer extends Component {
     let form = new FormData();
     form.append("file", { uri: data.uri, type: "image/jpg", name: "image" });
     form.append("mediaTypeId", "2");
+    form.append("promotionId", this.props.promotionId);
     this.props.sendPhoto(form);
     const { navigate } = this.props.navigation;
     navigate("PhotoPromoter");
@@ -91,4 +92,8 @@ const mapDispatchToProps = dispatch => ({
   sendPhoto: data => dispatch(PhotoActions.sendPhoto(data))
 });
 
-export default connect(null, mapDispatchToProps)(PhotoStandContainer);
+const mapStateToProps = state => ({
+  promotionId: state.form.sendObject.promotionId
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(PhotoStandContainer);

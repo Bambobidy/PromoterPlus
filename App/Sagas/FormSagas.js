@@ -49,11 +49,31 @@ export function* stockList(api, { token }) {
     const response = yield call(api, {
       token
     });
-    console.log('stock', response);
-    yield put(
-      FormActions.setProductList(response.data.products, response.data.client)
-    );
+    console.log('stock', response.data);
+    const data = response.data;
+    yield put(FormActions.promo(data));
+    let num = -1;
+    for (let i = 0; i < data.length; i++) {
+      const date = new Date().getTime();
+      const endDate = new Date(data[i].end);
+      const startDate = new Date(data[i].start);
+      if (startDate.getTime() < date && date < endDate.getTime()) {
+        num = i;
+        break;
+      }
+    }
+    console.log(num);
+    if (num !== -1) {
+      yield put(
+        FormActions.setProductList(data[num].products, data[num].client)
+      );
+      yield put(
+        FormActions.setPromotionId(data[num].promotionId)
+      );
+    } else {
+      console.log('error');
+    }
   } catch (err) {
-    window.alert('Please get signal to log into the app');
+    window.alert('Please get signal to log into the app', err);
   }
 }
