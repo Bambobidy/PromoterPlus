@@ -19,6 +19,7 @@ import RoundedButton from '../Components/RoundedButton';
 import { connect } from 'react-redux';
 import UnsentActions from '../Redux/UnsentRedux';
 import question from '../Transforms/Questions';
+import FormActions from '../Redux/FormRedux';
 
 class PromotionContainer extends Component {
   static navigationOptions = {
@@ -28,6 +29,26 @@ class PromotionContainer extends Component {
   state = {
     unsent: this.props.objectToSend
   };
+
+  componentDidMount() {
+    let stillActive = true;
+    for (let i = 0; i < this.props.promoInfo.length; i++) {
+      const date = new Date().getTime();
+      const endDate = new Date(this.props.promoInfo[i].end);
+      const startDate = new Date(this.props.promoInfo[i].start);
+      if (startDate.getTime() < date && date < endDate.getTime()) {
+        this.props.setProductList(
+          this.props.promoInfo[i].products,
+          this.props.promoInfo[i].client
+        );
+        stillActive = false;
+        break;
+      }
+    }
+    if (!stillActive) {
+      this.props.clearState();
+    }
+  }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.header) {
@@ -123,14 +144,20 @@ const mapStateToProps = state => ({
   unsent: state.unsent.unsent,
   refresh: state.unsent.refresh,
   company: state.form.client,
-  objectToSend: state.unsent.objectToSend
+  objectToSend: state.unsent.objectToSend,
+  promoInfo: state.form.promoInfo
 });
 
 const mapDispatchToProps = dispatch => ({
   sendUnsent: toSend => dispatch(UnsentActions.sendUnsent(toSend)),
   clearState: () => {
     dispatch({ type: 'CLEAR_DATA' });
-  }
+  },
+  setProductList: (products, client) =>
+    dispatch(FormActions.setProductList(products, client))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(PromotionContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PromotionContainer);

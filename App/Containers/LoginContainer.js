@@ -18,12 +18,25 @@ class LoginContainer extends Component {
     called: false
   };
 
-  // componentDidMount() {
-  //   this.getLocation();
-  //   this.interval = setInterval(() => {
-  //     this.getLocation();
-  //   }, 5000);
-  // }
+  componentDidMount() {
+    let stillActive = true;
+    for (let i = 0; i < this.props.promoInfo.length; i++) {
+      const date = new Date().getTime();
+      const endDate = new Date(this.props.promoInfo[i].end);
+      const startDate = new Date(this.props.promoInfo[i].start);
+      if (startDate.getTime() < date && date < endDate.getTime()) {
+        this.props.setProductList(
+          this.props.promoInfo[i].products,
+          this.props.promoInfo[i].client
+        );
+        stillActive = false;
+        break;
+      }
+    }
+    if (!stillActive) {
+      this.props.clearState();
+    }
+  }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.productList !== '' && !nextProps.date) {
@@ -96,7 +109,8 @@ class LoginContainer extends Component {
 const mapStateToProps = state => ({
   loginDate: state.form.date,
   date: state.loggedIn.date,
-  productList: state.form.productList
+  productList: state.form.productList,
+  promoInfo: state.form.promoInfo
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -105,7 +119,10 @@ const mapDispatchToProps = dispatch => ({
       FormActions.loginRequest(email, password, username, latitude, longitude)
     ),
   setLoggedIn: () => dispatch(TempLoginActions.setLoggedIn()),
-  setLoggedInDate: date => dispatch(LoggedInActions.setLoggedInDate(date))
+  setLoggedInDate: date => dispatch(LoggedInActions.setLoggedInDate(date)),
+  clearState: () => dispatch({ type: 'CLEAR_DATA' }),
+  setProductList: (products, client) =>
+    dispatch(FormActions.setProductList(products, client))
 });
 
 export default connect(
